@@ -1,31 +1,55 @@
 import { useState, useEffect } from "react";
 
 export default function SearchBar({ onSearch }) {
-  const [value, setValue] = useState("");
+  const [value, setValue]   = useState("");
+  const [focused, setFocused] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      onSearch(value.trim());
-    }, 500);
-    return () => clearTimeout(timer);
+    const t = setTimeout(() => onSearch(value.trim()), 500);
+    return () => clearTimeout(t);
   }, [value, onSearch]);
 
   return (
-    <div className="relative w-full max-w-lg">
+    <div style={{ position: "relative", flex: 1, maxWidth: "420px" }}>
       <input
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
         placeholder="Rechercher un film..."
-        className="w-full pl-10 pr-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition"
+        style={{
+          width: "100%",
+          padding: "0.55rem 2.25rem 0.55rem 0.85rem",
+          borderRadius: "7px",
+          border: `1.5px solid ${focused ? "var(--accent)" : "var(--border)"}`,
+          backgroundColor: "var(--surface)",
+          color: "var(--txt)",
+          fontSize: "0.875rem",
+          fontFamily: "inherit",
+          outline: "none",
+          transition: "border-color 0.15s",
+        }}
       />
       {value && (
         <button
           onClick={() => setValue("")}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition"
           aria-label="Effacer"
+          style={{
+            position: "absolute",
+            right: "0.65rem",
+            top: "50%",
+            transform: "translateY(-50%)",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            color: "var(--txt3)",
+            fontSize: "0.8rem",
+            lineHeight: 1,
+            padding: 0,
+          }}
         >
-          ✕
+          ×
         </button>
       )}
     </div>

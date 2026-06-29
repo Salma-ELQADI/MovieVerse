@@ -6,40 +6,98 @@ export default function Favoris() {
   const { favorites, removeFavorite } = useFavoritesContext();
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      <div className="max-w-7xl mx-auto px-4 py-10">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-extrabold">
-            ❤️ Mes Favoris{" "}
-            <span className="text-indigo-400">({favorites.length})</span>
-          </h1>
-          {favorites.length > 0}
-        </div>
+    <div style={{ minHeight: "100vh", backgroundColor: "var(--bg)" }}>
 
+      {/* Header */}
+      <div style={{
+        backgroundColor: "var(--surface)",
+        borderBottom: "1px solid var(--border)",
+        padding: "2rem 1.5rem",
+      }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <h1 style={{
+            fontSize: "1.5rem",
+            fontWeight: 800,
+            color: "var(--txt)",
+            letterSpacing: "-0.025em",
+            margin: 0,
+          }}>
+            Mes favoris
+          </h1>
+          <p style={{ color: "var(--txt2)", fontSize: "0.875rem", margin: "0.3rem 0 0" }}>
+            {favorites.length > 0
+              ? `${favorites.length} film${favorites.length > 1 ? "s" : ""} sauvegardé${favorites.length > 1 ? "s" : ""}`
+              : "Aucun favori pour l'instant"}
+          </p>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "1.75rem 1.5rem 4rem" }}>
+
+        {/* Empty state */}
         {favorites.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-24 text-gray-500">
-            <p className="text-6xl mb-4">🎞️</p>
-            <p className="text-xl font-medium mb-2">Aucun favori pour l'instant</p>
-            <p className="text-sm mb-8">
-              Parcours les tendances et clique sur 🤍 pour ajouter un film.
+          <div style={{
+            padding: "4rem 2rem",
+            textAlign: "center",
+            backgroundColor: "var(--surface)",
+            borderRadius: "10px",
+            border: "1px solid var(--border)",
+          }}>
+            <p style={{ fontWeight: 600, color: "var(--txt)", marginBottom: "0.4rem" }}>
+              Aucun favori
+            </p>
+            <p style={{ color: "var(--txt2)", fontSize: "0.875rem", marginBottom: "1.5rem" }}>
+              Parcourez les tendances et cliquez sur le coeur pour sauvegarder un film.
             </p>
             <Link
               to="/"
-              className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-semibold transition"
+              style={{
+                display: "inline-block",
+                padding: "0.55rem 1.25rem",
+                borderRadius: "7px",
+                backgroundColor: "var(--accent)",
+                color: "#fff",
+                fontSize: "0.875rem",
+                fontWeight: 600,
+                textDecoration: "none",
+              }}
             >
-              Explorer les tendances
+              Voir les tendances
             </Link>
           </div>
         )}
 
+        {/* Grid */}
         {favorites.length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(155px, 1fr))",
+            gap: "1rem",
+          }}>
             {favorites.map((movie) => (
-              <div key={movie.id} className="relative group">
+              <div key={movie.id} style={{ position: "relative" }}>
                 <MovieCard movie={movie} />
                 <button
                   onClick={() => removeFavorite(movie.id)}
-                  className="absolute bottom-12 left-0 right-0 mx-auto w-max opacity-0 group-hover:opacity-100 bg-red-600 hover:bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full transition-all duration-200"
+                  style={{
+                    position: "absolute",
+                    bottom: "0.5rem",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    padding: "0.25rem 0.75rem",
+                    borderRadius: "5px",
+                    border: "none",
+                    backgroundColor: "#fef2f2",
+                    color: "#b91c1c",
+                    fontSize: "0.72rem",
+                    fontWeight: 600,
+                    fontFamily: "inherit",
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                    opacity: 0,
+                    transition: "opacity 0.15s",
+                  }}
+                  className="remove-btn"
                 >
                   Supprimer
                 </button>
@@ -48,6 +106,10 @@ export default function Favoris() {
           </div>
         )}
       </div>
+
+      <style>{`
+        div:hover > .remove-btn { opacity: 1 !important; }
+      `}</style>
     </div>
   );
 }

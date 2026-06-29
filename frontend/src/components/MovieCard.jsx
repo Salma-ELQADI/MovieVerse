@@ -1,49 +1,107 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { imgUrl } from "../services/api";
 import { useFavoritesContext } from "../context/FavoritesContext";
 
-const PLACEHOLDER =
-  "https://via.placeholder.com/300x450/1e293b/64748b?text=No+Image";
+const PLACEHOLDER = "https://via.placeholder.com/300x450/e7e5e4/a8a29e?text=No+image";
 
 export default function MovieCard({ movie }) {
   const { isFavorite, toggleFavorite } = useFavoritesContext();
   const fav = isFavorite(movie.id);
+  const [hovered, setHovered] = useState(false);
 
   const poster = imgUrl(movie.poster_path) || PLACEHOLDER;
-  const year = movie.release_date?.slice(0, 4) || "—";
+  const year   = movie.release_date?.slice(0, 4) || "—";
   const rating = movie.vote_average?.toFixed(1) || "—";
 
   return (
-    <div className="group relative bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-indigo-500/20 hover:-translate-y-1 transition-all duration-200">
-      <Link to={`/film/${movie.id}`}>
+    <div
+      className="card"
+      style={{
+        backgroundColor: "var(--surface)",
+        borderRadius: "10px",
+        overflow: "hidden",
+        border: "1px solid var(--border)",
+        position: "relative",
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <Link to={`/film/${movie.id}`} style={{ display: "block", overflow: "hidden" }}>
         <img
           src={poster}
           alt={movie.title}
           loading="lazy"
-          className="w-full aspect-[2/3] object-cover"
+          style={{
+            width: "100%",
+            aspectRatio: "2/3",
+            objectFit: "cover",
+            display: "block",
+            transition: "transform 0.35s ease",
+            transform: hovered ? "scale(1.04)" : "scale(1)",
+          }}
         />
       </Link>
+
+      <div style={{
+        position: "absolute",
+        top: "8px",
+        left: "8px",
+        backgroundColor: "rgba(255,255,255,0.93)",
+        borderRadius: "4px",
+        padding: "2px 7px",
+        fontSize: "0.7rem",
+        fontWeight: 700,
+        color: "var(--txt)",
+      }}>
+        {rating}
+      </div>
 
       <button
         onClick={() => toggleFavorite(movie)}
         aria-label={fav ? "Retirer des favoris" : "Ajouter aux favoris"}
-        className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-black/60 backdrop-blur text-lg hover:scale-110 transition-transform"
+        style={{
+          position: "absolute",
+          top: "8px",
+          right: "8px",
+          width: "30px",
+          height: "30px",
+          borderRadius: "50%",
+          border: "none",
+          cursor: "pointer",
+          backgroundColor: fav ? "var(--accent)" : "rgba(255,255,255,0.93)",
+          color: fav ? "#fff" : "var(--txt2)",
+          fontSize: "0.75rem",
+          fontWeight: 700,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: "background 0.15s",
+        }}
       >
-        {fav ? "❤️" : "🤍"}
+        {fav ? "♥" : "♡"}
       </button>
 
-      <div className="p-3">
-        <Link to={`/film/${movie.id}`}>
-          <h3 className="font-semibold text-white text-sm leading-tight line-clamp-2 hover:text-indigo-400 transition-colors">
+      <div style={{ padding: "0.6rem 0.75rem 0.75rem" }}>
+        <Link to={`/film/${movie.id}`} style={{ textDecoration: "none" }}>
+          <p style={{
+            fontSize: "0.82rem",
+            fontWeight: 600,
+            color: hovered ? "var(--accent)" : "var(--txt)",
+            lineHeight: 1.35,
+            margin: 0,
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+            transition: "color 0.15s",
+          }}>
             {movie.title}
-          </h3>
+          </p>
         </Link>
-        <div className="flex items-center justify-between mt-2 text-xs text-gray-400">
-          <span>{year}</span>
-          <span className="flex items-center gap-1">
-            ⭐ <span className="text-yellow-400 font-medium">{rating}</span>
-          </span>
-        </div>
+        <p style={{ fontSize: "0.72rem", color: "var(--txt3)", margin: "4px 0 0", fontWeight: 500 }}>
+          {year}
+        </p>
       </div>
     </div>
   );

@@ -5,32 +5,67 @@ export default function Navbar() {
   const { pathname } = useLocation();
   const { favorites } = useFavoritesContext();
 
-  const linkClass = (path) =>
-    `px-3 py-1 rounded-lg font-medium transition-colors ${
-      pathname === path
-        ? "bg-indigo-600 text-white"
-        : "text-gray-300 hover:text-white hover:bg-white/10"
-    }`;
+  const active = (path) => pathname === path;
 
   return (
-    <nav className="sticky top-0 z-50 bg-gray-900/90 backdrop-blur border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link to="/" className="text-xl font-bold text-indigo-400 tracking-tight">
-          MovieVerse
+    <nav style={{
+      position: "sticky",
+      top: 0,
+      zIndex: 50,
+      backgroundColor: "rgba(255,255,255,0.92)",
+      backdropFilter: "blur(10px)",
+      borderBottom: "1px solid var(--border)",
+    }}>
+      <div style={{
+        maxWidth: "1200px",
+        margin: "0 auto",
+        padding: "0 1.5rem",
+        height: "60px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}>
+
+        {/* Logo */}
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <span style={{
+            fontSize: "1.05rem",
+            fontWeight: 800,
+            color: "var(--txt)",
+            letterSpacing: "-0.02em",
+          }}>
+            MovieVerse
+          </span>
         </Link>
 
-        <div className="flex items-center gap-2">
-          <Link to="/" className={linkClass("/")}>
-            Tendances
-          </Link>
-          <Link to="/favoris" className={linkClass("/favoris")}>
-            ❤️ Favoris
-            {favorites.length > 0 && (
-              <span className="ml-1.5 bg-indigo-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
-                {favorites.length}
-              </span>
-            )}
-          </Link>
+        <div style={{ display: "flex", gap: "0.25rem" }}>
+          {[
+            { to: "/",        label: "Tendances" },
+            { to: "/favoris", label: `Favoris${favorites.length > 0 ? ` (${favorites.length})` : ""}` },
+          ].map(({ to, label }) => (
+            <Link
+              key={to}
+              to={to}
+              style={{
+                textDecoration: "none",
+                padding: "0.4rem 0.9rem",
+                borderRadius: "6px",
+                fontSize: "0.875rem",
+                fontWeight: 500,
+                transition: "background 0.15s, color 0.15s",
+                backgroundColor: active(to) ? "var(--accent-light)" : "transparent",
+                color: active(to) ? "var(--accent)" : "var(--txt2)",
+              }}
+              onMouseEnter={(e) => {
+                if (!active(to)) e.currentTarget.style.backgroundColor = "var(--bg)";
+              }}
+              onMouseLeave={(e) => {
+                if (!active(to)) e.currentTarget.style.backgroundColor = "transparent";
+              }}
+            >
+              {label}
+            </Link>
+          ))}
         </div>
       </div>
     </nav>

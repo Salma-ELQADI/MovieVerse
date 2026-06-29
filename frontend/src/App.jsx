@@ -9,23 +9,20 @@ export default function App() {
   return (
     <BrowserRouter>
       <FavoritesProvider>
-        <div className="min-h-screen bg-gray-950">
+        <div style={{ minHeight: "100vh", backgroundColor: "var(--bg)" }}>
           <Navbar />
           <Routes>
-            <Route path="/" element={<Trending />} />
+            <Route path="/"         element={<Trending />} />
             <Route path="/film/:id" element={<DetailFilm />} />
-            <Route path="/favoris" element={<Favoris />} />
-            <Route
-              path="*"
-              element={
-                <div className="flex items-center justify-center min-h-[60vh] text-white text-center">
-                  <div>
-                    <p className="text-6xl mb-4">404</p>
-                    <p className="text-gray-400">Page introuvable.</p>
-                  </div>
+            <Route path="/favoris"  element={<Favoris />} />
+            <Route path="*" element={
+              <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+                <div>
+                  <p style={{ fontSize: "4rem", fontWeight: 800, color: "var(--txt)", lineHeight: 1 }}>404</p>
+                  <p style={{ color: "var(--txt2)", marginTop: "0.5rem" }}>Page introuvable.</p>
                 </div>
-              }
-            />
+              </div>
+            } />
           </Routes>
         </div>
       </FavoritesProvider>

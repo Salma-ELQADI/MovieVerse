@@ -6,13 +6,13 @@ import SearchBar from "../components/SearchBar";
 import Filters from "../components/Filters";
 
 export default function Trending() {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [query, setQuery] = useState("");
-  const [year, setYear] = useState("");
-  const [sortBy, setSortBy] = useState("popularity.desc");
-  const [page, setPage] = useState(1);
+  const [movies, setMovies]         = useState([]);
+  const [loading, setLoading]       = useState(true);
+  const [error, setError]           = useState(null);
+  const [query, setQuery]           = useState("");
+  const [year, setYear]             = useState("");
+  const [sortBy, setSortBy]         = useState("popularity.desc");
+  const [page, setPage]             = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   const fetchMovies = useCallback(async (q, yr, sort, pg) => {
@@ -29,7 +29,7 @@ export default function Trending() {
       }
       const data = res.data;
       setMovies(pg === 1 ? data.results : (prev) => [...prev, ...data.results]);
-      setTotalPages(Math.min(data.total_pages, 500)); // TMDB 
+      setTotalPages(Math.min(data.total_pages, 500));
     } catch (err) {
       setError("Impossible de charger les films. Vérifie ta clé API.");
       console.error(err);
@@ -38,7 +38,6 @@ export default function Trending() {
     }
   }, []);
 
-  // Reset to page 1 whenn filters change
   useEffect(() => {
     setPage(1);
     setMovies([]);
@@ -50,83 +49,154 @@ export default function Trending() {
     fetchMovies(query, year, sortBy, page);
   }, [page, fetchMovies, query, year, sortBy]);
 
-  const handleSearch = useCallback((q) => setQuery(q), []);
+  const handleSearch       = useCallback((q) => setQuery(q), []);
+  const handleFilterChange = ({ year: yr, sortBy: sort }) => { setYear(yr); setSortBy(sort); };
 
-  const handleFilterChange = ({ year: yr, sortBy: sort }) => {
-    setYear(yr);
-    setSortBy(sort);
-  };
+  const isDefault = !query && !year && sortBy === "popularity.desc";
 
-  const loadMore = () => {
-    if (page < totalPages) setPage((p) => p + 1);
-  };
-
-  const title = query
+  const sectionTitle = query
     ? `Résultats pour "${query}"`
     : year || sortBy !== "popularity.desc"
     ? "Films filtrés"
     : "Tendances cette semaine";
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      {!query && !year && sortBy === "popularity.desc" && (
-        <div className="relative h-48 md:h-64 bg-gradient-to-r from-indigo-900 via-purple-900 to-gray-900 flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-400 to-transparent" />
-          <div className="relative text-center px-4">
-            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">
-              MovieVerse
+    <div style={{ minHeight: "100vh", backgroundColor: "var(--bg)" }}>
+
+      {isDefault && (
+        <div style={{
+          backgroundColor: "var(--surface)",
+          borderBottom: "1px solid var(--border)",
+          padding: "3rem 1.5rem",
+        }}>
+          <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            <h1 style={{
+              fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
+              fontWeight: 800,
+              color: "var(--txt)",
+              letterSpacing: "-0.03em",
+              lineHeight: 1.1,
+              margin: 0,
+            }}>
+              Les films du moment
             </h1>
-            <p className="mt-2 text-gray-300 text-sm md:text-base">
-              Explore les films tendances, recherche, filtre et sauvegarde tes favoris.
+            <p style={{
+              marginTop: "0.6rem",
+              color: "var(--txt2)",
+              fontSize: "0.95rem",
+              lineHeight: 1.6,
+              maxWidth: "480px",
+            }}>
+              Explorez les tendances de la semaine, recherchez un titre, filtrez par année et sauvegardez vos favoris.
             </p>
           </div>
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col sm:flex-row gap-3 mb-8">
+      <div style={{
+        backgroundColor: "var(--surface)",
+        borderBottom: "1px solid var(--border)",
+        padding: "0.75rem 1.5rem",
+        position: "sticky",
+        top: "60px",
+        zIndex: 40,
+      }}>
+        <div style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "0.5rem",
+          alignItems: "center",
+        }}>
           <SearchBar onSearch={handleSearch} />
           <Filters year={year} sortBy={sortBy} onChange={handleFilterChange} />
         </div>
+      </div>
 
-        <h2 className="text-xl font-bold mb-6 text-gray-100">{title}</h2>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "1.75rem 1.5rem 4rem" }}>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
+          <h2 style={{ fontSize: "0.95rem", fontWeight: 600, color: "var(--txt)", margin: 0 }}>
+            {sectionTitle}
+          </h2>
+          {!loading && movies.length > 0 && (
+            <span style={{
+              fontSize: "0.75rem",
+              color: "var(--txt3)",
+              fontWeight: 500,
+            }}>
+              {movies.length} résultats
+            </span>
+          )}
+        </div>
 
         {error && (
-          <div className="text-center py-16 text-red-400">
-            <p className="text-4xl mb-3">⚠️</p>
-            <p>{error}</p>
+          <div style={{
+            padding: "2rem",
+            borderRadius: "8px",
+            backgroundColor: "#fef2f2",
+            border: "1px solid #fecaca",
+            color: "#b91c1c",
+            fontSize: "0.875rem",
+          }}>
+            {error}
           </div>
         )}
 
         {!error && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(155px, 1fr))",
+            gap: "1rem",
+          }}>
             {movies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
-            {loading &&
-              Array.from({ length: 10 }).map((_, i) => (
-                <SkeletonCard key={`sk-${i}`} />
-              ))}
+            {loading && Array.from({ length: 10 }).map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
           </div>
         )}
 
         {!loading && !error && movies.length === 0 && (
-          <div className="text-center py-20 text-gray-500">
-            <p className="text-5xl mb-4">🎞️</p>
-            <p className="text-lg">Aucun film trouvé.</p>
-            {query && (
-              <p className="text-sm mt-1">
-                Essaie un autre titre ou vérifie l'orthographe.
-              </p>
-            )}
+          <div style={{
+            padding: "4rem 2rem",
+            textAlign: "center",
+            color: "var(--txt2)",
+            fontSize: "0.9rem",
+          }}>
+            <p style={{ fontWeight: 600, color: "var(--txt)", marginBottom: "0.25rem" }}>
+              Aucun résultat
+            </p>
+            {query && <p>Essaie un autre titre.</p>}
           </div>
         )}
 
         {!loading && !error && movies.length > 0 && page < totalPages && (
-          <div className="flex justify-center mt-10">
+          <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
             <button
-              onClick={loadMore}
-              className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-semibold transition-colors"
+              onClick={() => setPage((p) => p + 1)}
+              style={{
+                padding: "0.6rem 1.75rem",
+                borderRadius: "7px",
+                border: "1.5px solid var(--border)",
+                backgroundColor: "var(--surface)",
+                color: "var(--txt)",
+                fontSize: "0.875rem",
+                fontWeight: 600,
+                fontFamily: "inherit",
+                cursor: "pointer",
+                transition: "border-color 0.15s, background 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "var(--accent)";
+                e.currentTarget.style.color = "var(--accent)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "var(--border)";
+                e.currentTarget.style.color = "var(--txt)";
+              }}
             >
               Charger plus
             </button>
