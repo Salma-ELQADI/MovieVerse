@@ -69,7 +69,7 @@ export default function Trending() {
           borderBottom: "1px solid var(--border)",
           padding: "3rem 1.5rem",
         }}>
-          <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div style={{ maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
             <h1 style={{
               fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
               fontWeight: 800,
@@ -86,6 +86,7 @@ export default function Trending() {
               fontSize: "0.95rem",
               lineHeight: 1.6,
               maxWidth: "480px",
+              margin: "0.6rem auto 0",
             }}>
               Explorez les tendances de la semaine, recherchez un titre, filtrez par année et sauvegardez vos favoris.
             </p>
