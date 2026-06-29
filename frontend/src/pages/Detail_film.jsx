@@ -98,7 +98,7 @@ export default function DetailFilm() {
         />
         <div style={{
           position: "absolute", inset: 0,
-          background: "linear-gradient(to top, var(--bg) 0%, rgba(245,245,244,0.3) 60%, transparent 100%)",
+          background: "linear-gradient(to top, var(--bg) 0%, transparent 100%)",
         }} />
 
         {/* Back button */}
@@ -108,8 +108,8 @@ export default function DetailFilm() {
             position: "absolute", top: "1rem", left: "1rem",
             padding: "0.45rem 1rem",
             borderRadius: "6px",
-            border: "1px solid rgba(255,255,255,0.5)",
-            backgroundColor: "rgba(255,255,255,0.8)",
+            border: "1px solid var(--border)",
+            backgroundColor: "var(--surface)",
             backdropFilter: "blur(8px)",
             color: "var(--txt)",
             fontSize: "0.82rem",
@@ -117,9 +117,10 @@ export default function DetailFilm() {
             fontFamily: "inherit",
             cursor: "pointer",
             transition: "background 0.15s",
+            opacity: 0.9,
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#fff")}
-          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.8)")}
+          onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+          onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.9")}
         >
           Retour
         </button>

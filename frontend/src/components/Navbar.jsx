@@ -1,9 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import { useFavoritesContext } from "../context/FavoritesContext";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Navbar() {
   const { pathname } = useLocation();
   const { favorites } = useFavoritesContext();
+  const { theme, toggle } = useTheme();
 
   const active = (path) => pathname === path;
 
@@ -12,9 +14,10 @@ export default function Navbar() {
       position: "sticky",
       top: 0,
       zIndex: 50,
-      backgroundColor: "rgba(255,255,255,0.92)",
+      backgroundColor: "var(--nav-bg)",
       backdropFilter: "blur(10px)",
       borderBottom: "1px solid var(--border)",
+      transition: "background-color 0.2s ease",
     }}>
       <div style={{
         maxWidth: "1200px",
@@ -24,21 +27,25 @@ export default function Navbar() {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
+        gap: "1rem",
       }}>
 
         {/* Logo */}
-        <Link to="/" style={{ textDecoration: "none" }}>
+        <Link to="/" style={{ textDecoration: "none", flexShrink: 0 }}>
           <span style={{
             fontSize: "1.05rem",
             fontWeight: 800,
-            color: "var(--txt)",
+            color: "var(--accent)",
             letterSpacing: "-0.02em",
           }}>
             MovieVerse
           </span>
         </Link>
 
-        <div style={{ display: "flex", gap: "0.25rem" }}>
+        {/* Right side */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
+
+          {/* Nav links */}
           {[
             { to: "/",        label: "Tendances" },
             { to: "/favoris", label: `Favoris${favorites.length > 0 ? ` (${favorites.length})` : ""}` },
@@ -57,7 +64,7 @@ export default function Navbar() {
                 color: active(to) ? "var(--accent)" : "var(--txt2)",
               }}
               onMouseEnter={(e) => {
-                if (!active(to)) e.currentTarget.style.backgroundColor = "var(--bg)";
+                if (!active(to)) e.currentTarget.style.backgroundColor = "var(--surface2)";
               }}
               onMouseLeave={(e) => {
                 if (!active(to)) e.currentTarget.style.backgroundColor = "transparent";
@@ -66,6 +73,14 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
+
+          {/* Divider */}
+          <div style={{ width: "1px", height: "20px", backgroundColor: "var(--border)", margin: "0 0.25rem" }} />
+
+          {/* Theme toggle */}
+          <button className="theme-toggle" onClick={toggle}>
+            {theme === "light" ? "Mode sombre" : "Mode clair"}
+          </button>
         </div>
       </div>
     </nav>

@@ -4,17 +4,41 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Light theme (default) ───────────────────────────────── */
 :root {
-  --bg:       #f5f5f4;
-  --surface:  #ffffff;
-  --border:   #e7e5e4;
-  --txt:      #1c1917;
-  --txt2:     #78716c;
-  --txt3:     #a8a29e;
-  --accent:   #db2777;
+  --bg:           #f5f5f4;
+  --surface:      #ffffff;
+  --surface2:     #f0efee;
+  --border:       #e7e5e4;
+  --txt:          #1c1917;
+  --txt2:         #78716c;
+  --txt3:         #a8a29e;
+  --accent:       #db2777;
   --accent-light: #fce7f3;
+
+  --nav-bg:       rgba(255, 255, 255, 0.92);
+  --shimmer-a:    #f0efee;
+  --shimmer-b:    #e7e5e4;
 }
 
+/* ── Dark theme ──────────────────────────────────────────── */
+[data-theme="dark"] {
+  --bg:           #0f0f0f;
+  --surface:      #1a1a1a;
+  --surface2:     #222222;
+  --border:       #2e2e2e;
+  --txt:          #f5f5f4;
+  --txt2:         #a8a29e;
+  --txt3:         #78716c;
+  --accent:       #f472b6;
+  --accent-light: #2d1a24;
+
+  --nav-bg:       rgba(26, 26, 26, 0.92);
+  --shimmer-a:    #1e1e1e;
+  --shimmer-b:    #2a2a2a;
+}
+
+/* ── Base ────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
@@ -24,13 +48,16 @@ body {
   color: var(--txt);
   font-family: "Inter", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+/* ── Scrollbar ───────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--txt3); }
 
+/* ── Utility ─────────────────────────────────────────────── */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -38,22 +65,46 @@ body {
   overflow: hidden;
 }
 
-/* skeleton shimmer */
+/* ── Skeleton shimmer ────────────────────────────────────── */
 @keyframes shimmer {
   0%   { background-position: -600px 0; }
-  100% { background-position: 600px 0; }
+  100% { background-position:  600px 0; }
 }
 .shimmer {
-  background: linear-gradient(90deg, #f0efee 25%, #e7e5e4 50%, #f0efee 75%);
+  background: linear-gradient(
+    90deg,
+    var(--shimmer-a) 25%,
+    var(--shimmer-b) 50%,
+    var(--shimmer-a) 75%
+  );
   background-size: 1200px 100%;
   animation: shimmer 1.4s ease-in-out infinite;
 }
 
-/* card hover */
+/* ── Card hover ──────────────────────────────────────────── */
 .card {
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 .card:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   transform: translateY(-4px);
+}
+
+/* ── Theme toggle button ─────────────────────────────────── */
+.theme-toggle {
+  padding: 0.35rem 0.85rem;
+  border-radius: 6px;
+  border: 1.5px solid var(--border);
+  background: var(--surface2);
+  color: var(--txt2);
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
