@@ -1,16 +1,87 @@
-# React + Vite
+# 🎬 MovieVerse
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Application web React pour explorer un catalogue de films, rechercher, filtrer et gérer une liste de favoris — propulsée par l'API publique [TMDB](https://www.themoviedb.org/).
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Fonctionnalités
 
-## React Compiler
+- **Page Tendances** — films tendances de la semaine avec poster, titre, note et date de sortie
+- **Recherche** — champ debounced (500ms), recherche par titre, message si aucun résultat
+- **Filtres & tri** — filtrer par année, trier par popularité / note / date de sortie
+- **Page Détails** — poster, titre, synopsis, genres, durée, note + bouton favori
+- **Favoris** — persistance via `localStorage`, ajout/suppression depuis n'importe quelle page
+- **Skeleton loading** — placeholders animés pendant le chargement
+- **Responsive** — mobile (2 colonnes) → desktop (5 colonnes)
+- **Pagination** — bouton "Charger plus"
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+## Installation
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+### 1. Cloner le repo
+
+```bash
+git clone https://github.com/<ton-pseudo>/movieverse.git
+cd movieverse/frontend
+```
+
+### 2. Installer les dépendances
+
+```bash
+npm install
+```
+
+### 3. Configurer la clé API
+
+Crée un fichier `.env` à la racine du dossier `frontend/` :
+
+```env
+VITE_TMDB_API_KEY=ta_clé_api_tmdb
+```
+
+> 🔑 Obtiens une clé gratuite sur [developer.themoviedb.org](https://developer.themoviedb.org)
+
+### 4. Lancer l'application
+
+```bash
+npm run dev
+```
+
+L'app sera disponible sur [http://localhost:5173](http://localhost:5173)
+
+---
+
+## Stack technique
+
+| Outil | Usage |
+|---|---|
+| React 19 + Vite | Framework & bundler |
+| React Router v7 | Navigation SPA |
+| Axios | Appels API |
+| Tailwind CSS v3 | Styles |
+| LocalStorage | Persistance des favoris |
+
+---
+
+## Structure du projet
+
+```
+src/
+├── components/
+│   ├── Navbar.jsx        # Barre de navigation
+│   ├── MovieCard.jsx     # Carte film réutilisable
+│   ├── SkeletonCard.jsx  # Placeholder de chargement
+│   ├── SearchBar.jsx     # Recherche debounced
+│   └── Filters.jsx       # Filtres année + tri
+├── context/
+│   └── FavoritesContext.jsx  # Context global favoris
+├── hooks/
+│   └── useFavorites.js   # Hook localStorage
+├── pages/
+│   ├── Trending.jsx      # Page principale
+│   ├── Detail_film.jsx   # Détails d'un film
+│   └── Favoris.jsx       # Liste des favoris
+└── services/
+    └── api.js            # Toutes les fonctions TMDB
+```
