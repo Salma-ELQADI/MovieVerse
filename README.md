@@ -1,5 +1,4 @@
-# MovieVerse : **Live Demo:** => https://movie-verse-ltnwgqxte-elqadisalma928-4497s-projects.vercel.app/
-
+# MovieVerse : **Live Demo:** => https://movie-verse-delta-three.vercel.app/
 Application web React pour explorer un catalogue de films, rechercher, filtrer et gérer une liste de favoris — propulsée par l'API publique [TMDB](https://www.themoviedb.org/).
 
 ---
