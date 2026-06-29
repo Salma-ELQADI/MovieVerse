@@ -22,7 +22,7 @@ Application web React pour explorer un catalogue de films, rechercher, filtrer e
 ### 1. Cloner le repo
 
 ```bash
-git clone https://github.com/<ton-pseudo>/movieverse.git
+git clone https://github.com/Salma-ELQADI/MovieVerse.git
 cd movieverse/frontend
 ```
 
@@ -38,6 +38,7 @@ Crée un fichier `.env` à la racine du dossier `frontend/` :
 
 ```env
 VITE_TMDB_API_KEY=ta_clé_api_tmdb
+VITE_TMDB_TOKEN=...
 ```
 
 > 🔑 Obtiens une clé gratuite sur [developer.themoviedb.org](https://developer.themoviedb.org)
@@ -46,9 +47,6 @@ VITE_TMDB_API_KEY=ta_clé_api_tmdb
 
 ```bash
 npm run dev
-```
-
-L'app sera disponible sur [http://localhost:5173](http://localhost:5173)
 
 ---
 
